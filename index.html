@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTN Nigeria | Welcome to the Bright World |Practical</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mtn: {
+                            yellow: '#FFCC00',
+                            yellowHover: '#E6B800',
+                            black: '#000000',
+                            dark: '#0d0d0d',
+                            cardDark: '#161616',
+                            cardBorder: '#282828',
+                            grayMuted: '#8E8E93',
+                            lightBg: '#F5F5F7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        '4xl': '2rem',
+                        '5xl': '2.5rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #080808;
+            color: #101010;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFCC00;
+        }
+
+        .glass-panel {
+            background: rgba(22, 22, 22, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .mtn-oval-logo {
+            width: 72px;
+            height: 40px;
+            border: 2.5px solid #000000;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            letter-spacing: -1.5px;
+            background: #FFCC00;
+            color: #000000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mtn-oval-logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #262626;
+            border-radius: 4px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: #FFCC00;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -7px;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+            transition: all 0.2s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .hero-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+        }
+        .hero-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .tab-btn.active {
+            background-color: #FFCC00;
+            color: #000000;
+            font-weight: 700;
+        }
+
+        .category-tab.active {
+            border-bottom: 3px solid #FFCC00;
+            color: #FFCC00;
+        }
+
+        /* Toast notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #FFCC00;
+            color: #000;
+            text-align: center;
+            border-radius: 50px;
+            padding: 12px 24px;
+            position: fixed;
+            z-index: 999;
+            bottom: 30px;
+            right: 30px;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 40px;
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white selection:bg-mtn-yellow selection:text-black">
+
+    <!-- Toast Container -->
+    <div id="toast"><i class="fa-solid fa-circle-check mr-2"></i><span id="toast-message">Notification</span></div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div class="max-w-[1600px] mx-auto bg-[#101010] min-h-screen shadow-2xl overflow-hidden relative">
+
+        <!-- 1. TOP UTILITY NAVIGATION BAR -->
+        <header class="w-full bg-[#050505] border-b border-white/5 text-xs font-medium text-gray-400 px-4 lg:px-12 py-2.5 flex justify-between items-center z-50 relative">
+            <div class="flex items-center space-x-6">
+                <a href="#" class="text-mtn-yellow font-bold flex items-center space-x-1.5 hover:text-white transition-colors">
+                    <span class="w-2 h-2 rounded-full bg-mtn-yellow inline-block animate-pulse"></span>
+                    <span>Personal</span>
+                </a>
+                <a href="#business" class="hover:text-mtn-yellow transition-colors">Business</a>
+                <a href="#enterprise" class="hover:text-mtn-yellow transition-colors">Enterprise</a>
+                <a href="#investors" class="hover:text-mtn-yellow transition-colors">Investors</a>
+                <a href="#foundation" class="hover:text-mtn-yellow transition-colors hidden md:inline-block">MTN Foundation</a>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="#coverage" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-location-dot text-mtn-yellow text-xs"></i>
+                    <span class="hidden sm:inline">Coverage Map</span>
+                </a>
+                <a href="#help" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-question text-xs"></i>
+                    <span class="hidden sm:inline">Help Center</span>
+                </a>
+                <!-- Language Selector Dropdown -->
+                <div class="relative group">
+                    <button class="flex items-center space-x-1 hover:text-white focus:outline-none bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+                        <i class="fa-solid fa-globe text-mtn-yellow"></i>
+                        <span>EN (NG)</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                    </button>
+                    <div class="absolute right-0 mt-1 w-32 bg-[#1A1A1A] border border-white/10 rounded-xl shadow-xl hidden group-hover:block z-50 overflow-hidden py-1">
+                        <a href="#" class="block px-4 py-2 hover:bg-mtn-yellow hover:text-black font-semibold text-gray-300">English</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-mtn-yellow hover:text-black text-gray-300">Hausa</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-mtn-yellow hover:text-black text-gray-300">Igbo</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-mtn-yellow hover:text-black text-gray-300">Yoruba</a>
+                        <a href="#" class="block px-4 py-2 hover:bg-mtn-yellow hover:text-black text-gray-300">Pidgin</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 2. MAIN HEADER & BRAND NAVBAR -->
+        <nav class="sticky top-0 z-40 bg-mtn-yellow text-black px-4 lg:px-12 py-3 flex items-center justify-between shadow-lg">
+            <!-- Brand Oval Logo -->
+            <div class="flex items-center space-x-8">
+                <a href="#" class="mtn-oval-logo">
+                    <span>MTN</span>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden lg:flex items-center space-x-7 font-bold text-sm tracking-tight">
+                    <a href="#plans-section" class="hover:opacity-75 transition-opacity py-1 border-b-2 border-transparent hover:border-black">Data & Airtime</a>
+                    <a href="#devices-section" class="hover:opacity-75 transition-opacity py-1 border-b-2 border-transparent hover:border-black">Devices & 5G</a>
+                    <a href="#broadband-section" class="hover:opacity-75 transition-opacity py-1 border-b-2 border-transparent hover:border-black">Fiber & Broadband</a>
+                    <a href="#momo-section" class="hover:opacity-75 transition-opacity py-1 border-b-2 border-transparent hover:border-black flex items-center gap-1.5">
+                        <span class="bg-black text-mtn-yellow text-[10px] px-1.5 py-0.5 rounded font-black tracking-wider">MoMo</span>
+                        <span>Financial Services</span>
+                    </a>
+                    <a href="#digital-section" class="hover:opacity-75 transition-opacity py-1 border-b-2 border-transparent hover:border-black">Entertainment & Play</a>
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <button onclick="toggleSearchModal()" class="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center transition-colors" title="Search">
+                    <i class="fa-solid fa-magnifying-glass text-black text-base"></i>
+                </button>
+                
+                <button onclick="openLoginModal()" class="hidden sm:flex items-center space-x-2 bg-black/10 hover:bg-black/20 px-4 py-2.5 rounded-full font-bold text-xs transition-colors">
+                    <i class="fa-solid fa-user"></i>
+                    <span>myMTN Login</span>
+                </button>
+
+                <button onclick="openRechargeModal()" class="bg-black text-white hover:bg-gray-900 px-5 py-2.5 rounded-full font-bold text-xs flex items-center space-x-2 shadow-md hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-bolt text-mtn-yellow"></i>
+                    <span>Quick Recharge</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 rounded-full bg-black text-mtn-yellow flex items-center justify-center focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg" id="mobile-menu-icon"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobile-drawer" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col justify-between p-6">
+            <div>
+                <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
+                    <div class="mtn-oval-logo">MTN</div>
+                    <button onclick="toggleMobileMenu()" class="text-white text-2xl focus:outline-none">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col space-y-4 font-bold text-lg text-white">
+                    <a href="#plans-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors">Data & Airtime</a>
+                    <a href="#devices-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors">Devices & 5G Routers</a>
+                    <a href="#broadband-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors">Fiber Broadband</a>
+                    <a href="#momo-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors flex items-center gap-2">
+                        <span class="bg-mtn-yellow text-black text-xs px-2 py-0.5 rounded font-black">MoMo</span>
+                        <span>Financial Services</span>
+                    </a>
+                    <a href="#digital-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors">Digital Lifestyle & Play</a>
+                    <a href="#calculator-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors">Data Calculator</a>
+                    <a href="#ussd-section" onclick="toggleMobileMenu()" class="hover:text-mtn-yellow transition-colors">USSD Directory</a>
+                </div>
+            </div>
+            <div class="space-y-3 pt-6 border-t border-white/10">
+                <button onclick="toggleMobileMenu(); openLoginModal();" class="w-full bg-white/10 text-white py-3 rounded-2xl font-bold flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-user text-mtn-yellow"></i>
+                    <span>Log in to myMTN</span>
+                </button>
+                <button onclick="toggleMobileMenu(); openRechargeModal();" class="w-full bg-mtn-yellow text-black py-3 rounded-2xl font-bold flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Quick Recharge</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. HERO CAROUSEL / BANNER SECTION -->
+        <section class="relative bg-black overflow-hidden min-h-[480px] lg:min-h-[540px] flex items-center">
+            <!-- Background Decorative Grid Lines -->
+            <div class="absolute inset-0 bg-[linear-gradient(to_right,#1f1f1f15_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f15_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+
+            <!-- Carousel Slide 1: 5G -->
+            <div class="hero-slide active w-full" id="slide-1">
+                <div class="px-6 lg:px-16 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center space-x-2 bg-mtn-yellow/10 border border-mtn-yellow/30 px-3 py-1.5 rounded-full text-mtn-yellow text-xs font-bold uppercase tracking-wider">
+                            <span class="w-2 h-2 rounded-full bg-mtn-yellow animate-ping"></span>
+                            <span>Ultra-Fast 5G Network</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                            Experience <span class="text-mtn-yellow">Limitless 5G</span> Speeds At Home & On The Go
+                        </h1>
+                        <p class="text-gray-400 text-base lg:text-lg max-w-xl">
+                            Stream 4K movies effortlessly, game with zero lag, and connect up to 64 devices with MTN 5G Broadband Routers.
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <a href="#broadband-section" class="bg-mtn-yellow hover:bg-mtn-yellowHover text-black px-7 py-3.5 rounded-full font-extrabold text-sm flex items-center space-x-3 transition-all transform hover:scale-105 shadow-lg shadow-mtn-yellow/20">
+                                <span>Get 5G Router Now</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                            <button onclick="openCoverageModal()" class="bg-white/10 hover:bg-white/20 text-white border border-white/15 px-6 py-3.5 rounded-full font-bold text-sm transition-all backdrop-blur-md">
+                                Check 5G Coverage
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center relative">
+                        <div class="w-72 h-72 lg:w-96 lg:h-96 rounded-full bg-gradient-to-tr from-mtn-yellow/20 to-transparent absolute -top-10 -right-10 blur-3xl"></div>
+                        <div class="relative z-10 glass-panel p-6 rounded-3xl border border-white/10 shadow-2xl text-center max-w-sm w-full">
+                            <div class="w-20 h-20 bg-mtn-yellow/20 text-mtn-yellow rounded-2xl mx-auto flex items-center justify-center text-4xl mb-4 border border-mtn-yellow/30">
+                                <i class="fa-solid fa-wifi"></i>
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-mtn-yellow">Special Launch Offer</span>
+                            <h3 class="text-2xl font-black text-white mt-1">5G Broadband Router</h3>
+                            <p class="text-gray-400 text-xs mt-2">Includes 100GB Free Data + Unlimited Night Browsing for 1 Month</p>
+                            <div class="mt-4 text-3xl font-black text-white">₦50,000 <span class="text-xs font-normal text-gray-400">/ one-off</span></div>
+                            <button onclick="triggerPurchase('5G Home Broadband Router', '50000')" class="w-full mt-5 bg-mtn-yellow text-black font-extrabold py-3 rounded-xl hover:bg-white transition-colors">
+                                Order Online
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Slide 2: MoMo -->
+            <div class="hero-slide w-full" id="slide-2">
+                <div class="px-6 lg:px-16 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center space-x-2 bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-full text-blue-400 text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-wallet"></i>
+                            <span>MoMo PSB Financial Services</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                            Send Money For <span class="text-mtn-yellow">Zero Fees</span> With MoMo Wallet
+                        </h1>
+                        <p class="text-gray-400 text-base lg:text-lg max-w-xl">
+                            No bank account needed! Dial *671# to open your MoMo wallet in 60 seconds, pay bills, and transfer cash anywhere in Nigeria.
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <a href="#momo-section" class="bg-mtn-yellow hover:bg-mtn-yellowHover text-black px-7 py-3.5 rounded-full font-extrabold text-sm flex items-center space-x-3 transition-all transform hover:scale-105">
+                                <span>Open MoMo Account</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                            <a href="#ussd-section" class="bg-white/10 hover:bg-white/20 text-white border border-white/15 px-6 py-3.5 rounded-full font-bold text-sm transition-all">
+                                Dial *671#
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="glass-panel p-6 rounded-3xl border border-white/10 shadow-2xl text-center max-w-sm w-full relative overflow-hidden">
+                            <div class="absolute -top-12 -right-12 w-32 h-32 bg-blue-500/20 rounded-full blur-xl"></div>
+                            <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-4">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <h3 class="text-2xl font-black text-white">MoMo Agent Network</h3>
+                            <p class="text-gray-400 text-xs mt-2">Over 500,000 Agents across Nigeria for easy cash-in and cash-out.</p>
+                            <div class="mt-6 p-4 bg-white/5 rounded-2xl border border-white/5 text-left space-y-2">
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-400">Transfer Fee</span>
+                                    <span class="text-green-400 font-bold">₦0.00</span>
+                                </div>
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-gray-400">Bill Payments</span>
+                                    <span class="text-white font-bold">Instant Cashback</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Slide 3: YafunYafun -->
+            <div class="hero-slide w-full" id="slide-3">
+                <div class="px-6 lg:px-16 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 px-3 py-1.5 rounded-full text-purple-400 text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-gift"></i>
+                            <span>SIM Tariff Offer</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                            Get <span class="text-mtn-yellow">800% Bonus</span> On Every Single Recharge!
+                        </h1>
+                        <p class="text-gray-400 text-base lg:text-lg max-w-xl">
+                            Activate a new MTN SIM today and enjoy the YafunYafun tariff plan: 8X bonus on airtime + double data offer for 3 full months.
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="scrollToServices('sim-activation')" class="bg-mtn-yellow hover:bg-mtn-yellowHover text-black px-7 py-3.5 rounded-full font-extrabold text-sm flex items-center space-x-3 transition-all transform hover:scale-105">
+                                <span>Get New SIM</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="glass-panel p-8 rounded-3xl border border-white/10 text-center max-w-sm w-full">
+                            <div class="text-5xl font-black text-mtn-yellow mb-2">800%</div>
+                            <div class="text-xl font-bold text-white mb-4">YafunYafun Bonus</div>
+                            <p class="text-gray-400 text-xs mb-6">Recharge ₦1,000 and receive ₦8,000 value instantly for calls and data.</p>
+                            <button onclick="openRechargeModal()" class="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-mtn-yellow transition-colors">
+                                Recharge Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <div class="absolute bottom-6 right-6 lg:right-16 z-20 flex items-center space-x-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+                <button onclick="prevSlide()" class="text-gray-400 hover:text-mtn-yellow p-1 transition-colors"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="flex space-x-2">
+                    <span class="dot w-2.5 h-2.5 rounded-full bg-mtn-yellow cursor-pointer" onclick="goToSlide(0)"></span>
+                    <span class="dot w-2.5 h-2.5 rounded-full bg-gray-600 cursor-pointer" onclick="goToSlide(1)"></span>
+                    <span class="dot w-2.5 h-2.5 rounded-full bg-gray-600 cursor-pointer" onclick="goToSlide(2)"></span>
+                </div>
+                <button onclick="nextSlide()" class="text-gray-400 hover:text-mtn-yellow p-1 transition-colors"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- 4. INTERACTIVE QUICK SERVICES WIDGET -->
+        <section class="relative z-30 -mt-8 px-4 lg:px-12 mb-16" id="quick-services">
+            <div class="bg-[#181818] border border-white/10 rounded-3xl p-4 sm:p-8 shadow-2xl">
+                <!-- Tab Headers -->
+                <div class="flex flex-wrap gap-2 border-b border-white/10 pb-4 mb-6">
+                    <button class="tab-btn active px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all" onclick="switchQuickTab(this, 'topup-panel')">
+                        <i class="fa-solid fa-bolt mr-2"></i>Quick Top-Up
+                    </button>
+                    <button class="tab-btn px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-gray-400 hover:text-white transition-all" onclick="switchQuickTab(this, 'data-finder-panel')">
+                        <i class="fa-solid fa-compass mr-2"></i>Data Bundle Finder
+                    </button>
+                    <button class="tab-btn px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-gray-400 hover:text-white transition-all" onclick="switchQuickTab(this, 'sim-panel')">
+                        <i class="fa-solid fa-sim-card mr-2"></i>SIM Activation & NIN
+                    </button>
+                </div>
+
+                <!-- Tab 1: Quick Top-Up Content -->
+                <div id="topup-panel" class="quick-tab-content block">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        <div class="lg:col-span-8 space-y-4">
+                            <div class="flex items-center space-x-4 mb-2">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="recharge-type" value="airtime" checked onchange="updateRechargeType()" class="accent-mtn-yellow">
+                                    <span class="font-bold text-sm">Airtime</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="recharge-type" value="data" onchange="updateRechargeType()" class="accent-mtn-yellow">
+                                    <span class="font-bold text-sm">Data Bundle</span>
+                                </label>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-400 mb-1">MTN Phone Number</label>
+                                    <div class="relative">
+                                        <input type="tel" id="topup-phone" placeholder="0803 000 0000" maxlength="11" class="w-full bg-[#101010] border border-white/15 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-mtn-yellow font-mono text-sm">
+                                        <span class="absolute right-3 top-3 text-xs bg-mtn-yellow/20 text-mtn-yellow px-2 py-0.5 rounded font-bold">MTN</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-400 mb-1">Select / Enter Amount (₦)</label>
+                                    <input type="number" id="topup-amount" value="1000" placeholder="e.g. 1000" class="w-full bg-[#101010] border border-white/15 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-mtn-yellow font-bold text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Quick Preset Amount Pills -->
+                            <div class="flex flex-wrap gap-2 pt-1">
+                                <span class="text-xs text-gray-400 self-center mr-2">Quick:</span>
+                                <button onclick="setTopupAmount(200)" class="bg-white/5 hover:bg-mtn-yellow hover:text-black border border-white/10 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium">₦200</button>
+                                <button onclick="setTopupAmount(500)" class="bg-white/5 hover:bg-mtn-yellow hover:text-black border border-white/10 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium">₦500</button>
+                                <button onclick="setTopupAmount(1000)" class="bg-white/5 hover:bg-mtn-yellow hover:text-black border border-white/10 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium">₦1,000</button>
+                                <button onclick="setTopupAmount(2000)" class="bg-white/5 hover:bg-mtn-yellow hover:text-black border border-white/10 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium">₦2,000</button>
+                                <button onclick="setTopupAmount(5000)" class="bg-white/5 hover:bg-mtn-yellow hover:text-black border border-white/10 text-xs px-3 py-1.5 rounded-lg transition-colors font-medium">₦5,000</button>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-4 bg-[#101010] p-5 rounded-2xl border border-white/5 text-center space-y-4">
+                            <div class="text-xs text-gray-400">Payment Method</div>
+                            <div class="flex justify-center space-x-3 text-xl text-gray-300">
+                                <i class="fa-solid fa-credit-card hover:text-mtn-yellow" title="Debit Card"></i>
+                                <i class="fa-solid fa-building-columns hover:text-mtn-yellow" title="Bank Transfer"></i>
+                                <i class="fa-solid fa-wallet hover:text-mtn-yellow" title="MoMo Wallet"></i>
+                            </div>
+                            <button onclick="processQuickRecharge()" class="w-full bg-mtn-yellow hover:bg-mtn-yellowHover text-black font-extrabold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                                <span>Proceed to Pay</span>
+                                <i class="fa-solid fa-lock text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Data Finder -->
+                <div id="data-finder-panel" class="quick-tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-[#101010] p-4 rounded-xl border border-white/5">
+                            <div class="text-mtn-yellow font-bold text-sm mb-1"><i class="fa-solid fa-clock mr-2"></i>Daily Bundles</div>
+                            <p class="text-xs text-gray-400 mb-3">Quick data for light daily tasks & messaging.</p>
+                            <button onclick="filterBundles('daily')" class="text-xs bg-white/10 hover:bg-mtn-yellow hover:text-black text-white px-3 py-1.5 rounded-lg w-full font-bold">View Plans</button>
+                        </div>
+                        <div class="bg-[#101010] p-4 rounded-xl border border-white/5">
+                            <div class="text-mtn-yellow font-bold text-sm mb-1"><i class="fa-solid fa-calendar-week mr-2"></i>Weekly Bundles</div>
+                            <p class="text-xs text-gray-400 mb-3">Balanced data for moderate weekly browsing.</p>
+                            <button onclick="filterBundles('weekly')" class="text-xs bg-white/10 hover:bg-mtn-yellow hover:text-black text-white px-3 py-1.5 rounded-lg w-full font-bold">View Plans</button>
+                        </div>
+                        <div class="bg-[#101010] p-4 rounded-xl border border-white/5">
+                            <div class="text-mtn-yellow font-bold text-sm mb-1"><i class="fa-solid fa-calendar-days mr-2"></i>Monthly Bundles</div>
+                            <p class="text-xs text-gray-400 mb-3">Heavy value data for remote work & streaming.</p>
+                            <button onclick="filterBundles('monthly')" class="text-xs bg-white/10 hover:bg-mtn-yellow hover:text-black text-white px-3 py-1.5 rounded-lg w-full font-bold">View Plans</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: SIM Activation -->
+                <div id="sim-panel" class="quick-tab-content hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-lg text-white">NIN-SIM Linkage & SIM Registration</h4>
+                            <p class="text-xs text-gray-400">Comply with NCC regulations by linking your National Identification Number (NIN) to your MTN line seamlessly online.</p>
+                            <div class="flex flex-wrap gap-3 pt-2">
+                                <button onclick="showNinModal()" class="bg-mtn-yellow text-black font-bold px-4 py-2 rounded-xl text-xs hover:bg-white transition-colors">
+                                    Link NIN Online
+                                </button>
+                                <a href="#ussd-section" class="bg-white/10 text-white font-bold px-4 py-2 rounded-xl text-xs hover:bg-white/20 transition-colors">
+                                    Dial *996#
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-[#101010] p-4 rounded-xl border border-white/5 text-xs space-y-2">
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-gray-400">New SIM Price</span>
+                                <span class="font-bold text-white">₦500</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/5 pb-2">
+                                <span class="text-gray-400">Activation Time</span>
+                                <span class="font-bold text-green-400">Instant</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Required Document</span>
+                                <span class="font-bold text-white">Valid NIN Slip</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. FEATURED PRODUCTS & PLANS GRID -->
+        <section class="px-4 lg:px-12 py-12 bg-[#0C0C0C]" id="plans-section">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                <div>
+                    <span class="text-mtn-yellow text-xs font-bold uppercase tracking-widest">Tailored Solutions</span>
+                    <h2 class="text-3xl lg:text-4xl font-black text-white mt-1">Popular Data Plans</h2>
+                </div>
+                <!-- Category Filter Switcher -->
+                <div class="flex space-x-4 mt-4 md:mt-0 border-b border-white/10 overflow-x-auto pb-2">
+                    <button class="category-tab active text-xs font-bold uppercase tracking-wider pb-2 transition-colors whitespace-nowrap" onclick="filterCategory(this, 'all')">All Plans</button>
+                    <button class="category-tab text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white pb-2 transition-colors whitespace-nowrap" onclick="filterCategory(this, 'daily')">Daily</button>
+                    <button class="category-tab text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white pb-2 transition-colors whitespace-nowrap" onclick="filterCategory(this, 'weekly')">Weekly</button>
+                    <button class="category-tab text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white pb-2 transition-colors whitespace-nowrap" onclick="filterCategory(this, 'monthly')">Monthly</button>
+                    <button class="category-tab text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white pb-2 transition-colors whitespace-nowrap" onclick="filterCategory(this, '5g')">5G Fiber</button>
+                </div>
+            </div>
+
+            <!-- Cards Container -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="bundle-cards-container">
+                <!-- Card 1 -->
+                <div class="bundle-card monthly glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-mtn-yellow/10 text-mtn-yellow border border-mtn-yellow/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Monthly Best</span>
+                            <i class="fa-solid fa-wifi text-gray-500 group-hover:text-mtn-yellow transition-colors"></i>
+                        </div>
+                        <div class="text-3xl font-black text-white mb-1">1.5GB <span class="text-xs font-normal text-gray-400">+ 1.5GB Night</span></div>
+                        <div class="text-xs text-gray-400 mb-4">Validity: 30 Days</div>
+                        <ul class="text-xs text-gray-300 space-y-2 mb-6">
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>USSD Direct Code: <b>*312*106#</b></li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Free Spotify Streaming</li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Rollover of unused data</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-mtn-yellow mb-4">₦1,200</div>
+                        <button onclick="triggerPurchase('1.5GB Monthly Plan', '1200')" class="w-full bg-white/10 hover:bg-mtn-yellow hover:text-black text-white font-bold py-3 rounded-xl transition-all">
+                            Buy Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bundle-card weekly glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Weekly Hot</span>
+                            <i class="fa-solid fa-bolt text-gray-500 group-hover:text-mtn-yellow transition-colors"></i>
+                        </div>
+                        <div class="text-3xl font-black text-white mb-1">7GB <span class="text-xs font-normal text-gray-400">All-Day</span></div>
+                        <div class="text-xs text-gray-400 mb-4">Validity: 7 Days</div>
+                        <ul class="text-xs text-gray-300 space-y-2 mb-6">
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>USSD Direct Code: <b>*312*150#</b></li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Includes YouTube Night</li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Fast 4G/5G Speeds</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-mtn-yellow mb-4">₦2,000</div>
+                        <button onclick="triggerPurchase('7GB Weekly Plan', '2000')" class="w-full bg-white/10 hover:bg-mtn-yellow hover:text-black text-white font-bold py-3 rounded-xl transition-all">
+                            Buy Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bundle-card monthly glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-12 -top-12 w-24 h-24 bg-mtn-yellow/10 rounded-full blur-xl"></div>
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-green-500/10 text-green-400 border border-green-500/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Heavy User</span>
+                            <i class="fa-solid fa-fire text-gray-500 group-hover:text-mtn-yellow transition-colors"></i>
+                        </div>
+                        <div class="text-3xl font-black text-white mb-1">20GB <span class="text-xs font-normal text-gray-400">Heavy Plan</span></div>
+                        <div class="text-xs text-gray-400 mb-4">Validity: 30 Days</div>
+                        <ul class="text-xs text-gray-300 space-y-2 mb-6">
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>USSD Direct Code: <b>*312*116#</b></li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Work-From-Home Bonus</li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Full 5G Priority Access</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-mtn-yellow mb-4">₦5,500</div>
+                        <button onclick="triggerPurchase('20GB Heavy Monthly Plan', '5500')" class="w-full bg-mtn-yellow hover:bg-mtn-yellowHover text-black font-extrabold py-3 rounded-xl transition-all">
+                            Buy Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bundle-card 5g glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Unlimited</span>
+                            <i class="fa-solid fa-infinity text-gray-500 group-hover:text-mtn-yellow transition-colors"></i>
+                        </div>
+                        <div class="text-3xl font-black text-white mb-1">5G Unlimited</div>
+                        <div class="text-xs text-gray-400 mb-4">Validity: 30 Days (Home Router)</div>
+                        <ul class="text-xs text-gray-300 space-y-2 mb-6">
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Uncapped Speed up to 1Gbps</li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Connect 32+ Devices</li>
+                            <li><i class="fa-solid fa-check text-mtn-yellow mr-2"></i>Dedicated 24/7 VIP Support</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-black text-mtn-yellow mb-4">₦25,000</div>
+                        <button onclick="triggerPurchase('5G Unlimited Home Plan', '25000')" class="w-full bg-white/10 hover:bg-mtn-yellow hover:text-black text-white font-bold py-3 rounded-xl transition-all">
+                            Buy Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. MOMO FINANCIAL SERVICES HIGHLIGHT -->
+        <section class="px-4 lg:px-12 py-12 bg-black relative" id="momo-section">
+            <div class="bg-gradient-to-r from-[#001E3C] to-[#0A0A0A] border border-blue-500/20 rounded-5xl p-8 lg:p-12 relative overflow-hidden">
+                <!-- Decorative Circle -->
+                <div class="absolute right-0 top-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center space-x-2 bg-blue-500/20 border border-blue-400/30 px-3 py-1 rounded-full text-blue-300 text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span>MoMo Payment Service Bank</span>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+                            Simplified Mobile Banking for <span class="text-mtn-yellow">Every Nigerian</span>
+                        </h2>
+                        <p class="text-gray-300 text-sm lg:text-base">
+                            Experience hassle-free financial transactions with MoMo. Transfer cash, pay utility bills, purchase airtime at a discount, and accept payments as a merchant—all from your phone.
+                        </p>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <i class="fa-solid fa-paper-plane text-mtn-yellow text-xl mb-2"></i>
+                                <h4 class="font-bold text-sm text-white">Money Transfer</h4>
+                                <p class="text-[11px] text-gray-400">Send to any bank instantly</p>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                <i class="fa-solid fa-receipt text-blue-400 text-xl mb-2"></i>
+                                <h4 class="font-bold text-sm text-white">Bill Payments</h4>
+                                <p class="text-[11px] text-gray-400">DSTV, EKEDC, IKEDC, etc.</p>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-2xl border border-white/5 col-span-2 sm:col-span-1">
+                                <i class="fa-solid fa-store text-green-400 text-xl mb-2"></i>
+                                <h4 class="font-bold text-sm text-white">MoMo Merchant</h4>
+                                <p class="text-[11px] text-gray-400">Collect payments easily</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4 pt-2">
+                            <button onclick="copyUSSD('*671#')" class="bg-mtn-yellow hover:bg-mtn-yellowHover text-black px-6 py-3 rounded-full font-extrabold text-xs sm:text-sm flex items-center space-x-2">
+                                <span>Dial *671#</span>
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                            <a href="#momo-details" class="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full font-bold text-xs sm:text-sm transition-colors border border-white/10">
+                                Find Nearest Agent
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="glass-panel p-6 rounded-3xl border border-white/10 max-w-sm w-full space-y-4">
+                            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                                <span class="font-bold text-sm text-white">MoMo Wallet Interface</span>
+                                <span class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded font-bold">Active</span>
+                            </div>
+                            <div class="bg-black/50 p-4 rounded-2xl border border-white/5">
+                                <div class="text-xs text-gray-400 mb-1">Available Balance</div>
+                                <div class="text-3xl font-black text-white">₦45,250.00</div>
+                                <div class="text-[10px] text-gray-500 mt-1">Account No: 0803 123 4567</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-xs bg-white/5 p-3 rounded-xl">
+                                    <span class="text-gray-300"><i class="fa-solid fa-arrow-down-left text-green-400 mr-2"></i>Received from Bayo</span>
+                                    <span class="text-green-400 font-bold">+₦10,000</span>
+                                </div>
+                                <div class="flex justify-between text-xs bg-white/5 p-3 rounded-xl">
+                                    <span class="text-gray-300"><i class="fa-solid fa-bolt text-mtn-yellow mr-2"></i>Airtime Recharge</span>
+                                    <span class="text-white font-bold">-₦1,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. MTN ECOSYSTEM & DIGITAL SERVICES -->
+        <section class="px-4 lg:px-12 py-12 bg-[#0A0A0A]" id="digital-section">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-mtn-yellow text-xs font-bold uppercase tracking-widest">Digital Lifestyle</span>
+                <h2 class="text-3xl lg:text-4xl font-black text-white mt-1">Entertainment & Services</h2>
+                <p class="text-gray-400 text-sm mt-2">Unlimited music streaming, movies, gaming, and sports right on your phone.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Play -->
+                <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group">
+                    <div class="w-14 h-14 bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-2">MTN Play</h3>
+                    <p class="text-xs text-gray-400 mb-4">Access hundreds of premium mobile games with zero data download required.</p>
+                    <a href="#" class="text-mtn-yellow text-xs font-bold flex items-center space-x-2 group-hover:translate-x-1 transition-transform">
+                        <span>Explore Games</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Shortz -->
+                <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group">
+                    <div class="w-14 h-14 bg-purple-500/20 text-purple-400 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clapperboard"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-2">MTN Shortz</h3>
+                    <p class="text-xs text-gray-400 mb-4">Binge trending original short movies, comedy skits, and web series daily.</p>
+                    <a href="#" class="text-mtn-yellow text-xs font-bold flex items-center space-x-2 group-hover:translate-x-1 transition-transform">
+                        <span>Watch Shortz</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- MusicTime -->
+                <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group">
+                    <div class="w-14 h-14 bg-green-500/20 text-green-400 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-2">MusicTime</h3>
+                    <p class="text-xs text-gray-400 mb-4">Pay-as-you-go music streaming. Listen to millions of Afrobeats hits by the minute.</p>
+                    <a href="#" class="text-mtn-yellow text-xs font-bold flex items-center space-x-2 group-hover:translate-x-1 transition-transform">
+                        <span>Start Listening</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Ayoba -->
+                <div class="glass-panel p-6 rounded-3xl border border-white/10 hover:border-mtn-yellow/50 transition-all group">
+                    <div class="w-14 h-14 bg-mtn-yellow/20 text-mtn-yellow rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h3 class="font-bold text-xl text-white mb-2">Ayoba SuperApp</h3>
+                    <p class="text-xs text-gray-400 mb-4">Chat, play games, read news, and transfer money without using your main data balance.</p>
+                    <a href="#" class="text-mtn-yellow text-xs font-bold flex items-center space-x-2 group-hover:translate-x-1 transition-transform">
+                        <span>Download Ayoba</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. INTERACTIVE DATA BUNDLE CALCULATOR -->
+        <section class="px-4 lg:px-12 py-12 bg-[#121212] border-y border-white/5" id="calculator-section">
+            <div class="max-w-4xl mx-auto bg-[#181818] border border-white/10 rounded-4xl p-6 sm:p-10 shadow-2xl">
+                <div class="text-center mb-8">
+                    <span class="text-mtn-yellow text-xs font-bold uppercase tracking-widest"><i class="fa-solid fa-calculator mr-2"></i>Smart Estimator</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Data Usage Calculator</h2>
+                    <p class="text-xs text-gray-400 mt-1">Adjust your daily activities below to estimate your monthly data needs.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Sliders -->
+                    <div class="space-y-6">
+                        <!-- Video Slider -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2">
+                                <span class="text-gray-300"><i class="fa-solid fa-video text-red-500 mr-2"></i>Video Streaming (HD)</span>
+                                <span class="text-mtn-yellow"><span id="val-video">2</span> hrs/day</span>
+                            </div>
+                            <input type="range" id="slider-video" min="0" max="10" value="2" oninput="calculateDataUsage()">
+                        </div>
+
+                        <!-- Music Slider -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2">
+                                <span class="text-gray-300"><i class="fa-solid fa-headphones text-green-400 mr-2"></i>Music & Podcasts</span>
+                                <span class="text-mtn-yellow"><span id="val-music">3</span> hrs/day</span>
+                            </div>
+                            <input type="range" id="slider-music" min="0" max="12" value="3" oninput="calculateDataUsage()">
+                        </div>
+
+                        <!-- Social Media Slider -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2">
+                                <span class="text-gray-300"><i class="fa-solid fa-hashtag text-blue-400 mr-2"></i>Social Media & TikTok</span>
+                                <span class="text-mtn-yellow"><span id="val-social">4</span> hrs/day</span>
+                            </div>
+                            <input type="range" id="slider-social" min="0" max="12" value="4" oninput="calculateDataUsage()">
+                        </div>
+
+                        <!-- Gaming Slider -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2">
+                                <span class="text-gray-300"><i class="fa-solid fa-gamepad text-purple-400 mr-2"></i>Online Gaming</span>
+                                <span class="text-mtn-yellow"><span id="val-gaming">1</span> hrs/day</span>
+                            </div>
+                            <input type="range" id="slider-gaming" min="0" max="8" value="1" oninput="calculateDataUsage()">
+                        </div>
+                    </div>
+
+                    <!-- Recommended Plan Result Output -->
+                    <div class="bg-[#101010] p-6 rounded-3xl border border-white/10 text-center space-y-4">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Estimated Monthly Need</span>
+                        <div class="text-4xl lg:text-5xl font-black text-mtn-yellow" id="calc-result-gb">18.5 GB</div>
+                        <div class="border-t border-white/10 pt-4">
+                            <div class="text-xs text-gray-400">Recommended Plan:</div>
+                            <div class="text-lg font-bold text-white mt-1" id="calc-plan-name">MTN 20GB Monthly Plan</div>
+                            <div class="text-xl font-black text-mtn-yellow mt-1" id="calc-plan-price">₦5,500 / month</div>
+                        </div>
+                        <button onclick="buyCalculatedPlan()" class="w-full bg-mtn-yellow hover:bg-mtn-yellowHover text-black font-extrabold py-3 rounded-xl transition-all shadow-lg">
+                            Subscribe Recommended Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. SUPPORT & USSD QUICK CODES HUB -->
+        <section class="px-4 lg:px-12 py-12 bg-black" id="ussd-section">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left: Zigi AI Chatbot & Store Locator -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="glass-panel p-6 rounded-3xl border border-white/10 flex items-center space-x-5">
+                        <div class="w-16 h-16 rounded-2xl bg-mtn-yellow/20 border border-mtn-yellow/30 flex items-center justify-center text-mtn-yellow text-3xl flex-shrink-0">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-extrabold text-mtn-yellow uppercase tracking-widest">24/7 Virtual Assistant</span>
+                            <h3 class="text-xl font-black text-white">Chat With Zigi</h3>
+                            <p class="text-xs text-gray-400 mt-1">Get instant answers for data balance, SIM registration, and troubleshooting.</p>
+                            <button onclick="openZigiChat()" class="mt-3 text-xs font-bold bg-white/10 hover:bg-mtn-yellow hover:text-black text-white px-4 py-2 rounded-xl transition-all inline-block">
+                                Start Chat on WhatsApp
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-3xl border border-white/10 flex items-center space-x-5">
+                        <div class="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-3xl flex-shrink-0">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest">Customer Care</span>
+                            <h3 class="text-xl font-black text-white">Find MTN Store</h3>
+                            <p class="text-xs text-gray-400 mt-1">Locate the nearest MTN Service Center or Partner Shop across Nigeria.</p>
+                            <button onclick="openStoreLocator()" class="mt-3 text-xs font-bold bg-white/10 hover:bg-white text-white hover:text-black px-4 py-2 rounded-xl transition-all inline-block">
+                                Open Store Map
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: USSD Codes Grid -->
+                <div class="lg:col-span-7 bg-[#141414] p-6 lg:p-8 rounded-3xl border border-white/10">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-2xl font-black text-white">Quick USSD Codes Directory</h3>
+                            <p class="text-xs text-gray-400">Perform quick actions directly from your phone dialer.</p>
+                        </div>
+                        <span class="text-xs bg-mtn-yellow/10 text-mtn-yellow px-3 py-1 rounded-full font-bold border border-mtn-yellow/20">NCC Compliant</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-[#1A1A1A] p-3.5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-gray-400">Buy Data & Airtime</div>
+                                <div class="font-mono font-bold text-mtn-yellow text-sm">*312#</div>
+                            </div>
+                            <button onclick="copyUSSD('*312#')" class="text-xs bg-white/5 hover:bg-mtn-yellow hover:text-black text-white p-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-[#1A1A1A] p-3.5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-gray-400">Check Account Balance</div>
+                                <div class="font-mono font-bold text-mtn-yellow text-sm">*310#</div>
+                            </div>
+                            <button onclick="copyUSSD('*310#')" class="text-xs bg-white/5 hover:bg-mtn-yellow hover:text-black text-white p-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-[#1A1A1A] p-3.5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-gray-400">Borrow Airtime (XtraTime)</div>
+                                <div class="font-mono font-bold text-mtn-yellow text-sm">*303#</div>
+                            </div>
+                            <button onclick="copyUSSD('*303#')" class="text-xs bg-white/5 hover:bg-mtn-yellow hover:text-black text-white p-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-[#1A1A1A] p-3.5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-gray-400">MoMo Wallet Services</div>
+                                <div class="font-mono font-bold text-mtn-yellow text-sm">*671#</div>
+                            </div>
+                            <button onclick="copyUSSD('*671#')" class="text-xs bg-white/5 hover:bg-mtn-yellow hover:text-black text-white p-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-[#1A1A1A] p-3.5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-gray-400">NIN-SIM Linkage Status</div>
+                                <div class="font-mono font-bold text-mtn-yellow text-sm">*996#</div>
+                            </div>
+                            <button onclick="copyUSSD('*996#')" class="text-xs bg-white/5 hover:bg-mtn-yellow hover:text-black text-white p-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="bg-[#1A1A1A] p-3.5 rounded-2xl border border-white/5 flex justify-between items-center">
+                            <div>
+                                <div class="text-xs text-gray-400">Value Added Services (VAS)</div>
+                                <div class="font-mono font-bold text-mtn-yellow text-sm">*305#</div>
+                            </div>
+                            <button onclick="copyUSSD('*305#')" class="text-xs bg-white/5 hover:bg-mtn-yellow hover:text-black text-white p-2 rounded-lg transition-colors">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. COMPREHENSIVE FOOTER SECTION -->
+        <footer class="bg-[#050505] text-gray-400 text-xs border-t border-white/10 pt-16 pb-12 px-4 lg:px-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <!-- Col 1: Brand & Apps -->
+                <div class="col-span-2 lg:col-span-1 space-y-4">
+                    <div class="mtn-oval-logo">MTN</div>
+                    <p class="text-gray-500 leading-relaxed">
+                        MTN Nigeria Communications PLC is Nigeria's premier telecommunications company, providing fast 5G broadband, mobile voice, and digital financial services.
+                    </p>
+                    <div class="pt-2">
+                        <div class="font-bold text-white mb-2">Download myMTN App</div>
+                        <div class="flex space-x-2">
+                            <a href="#" class="bg-white/10 hover:bg-white/20 p-2.5 rounded-xl text-white text-base flex items-center space-x-2 border border-white/5">
+                                <i class="fa-brands fa-apple"></i>
+                                <span class="text-[10px] font-bold">App Store</span>
+                            </a>
+                            <a href="#" class="bg-white/10 hover:bg-white/20 p-2.5 rounded-xl text-white text-base flex items-center space-x-2 border border-white/5">
+                                <i class="fa-brands fa-google-play"></i>
+                                <span class="text-[10px] font-bold">Google Play</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2: Personal -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-white uppercase tracking-wider">Personal Services</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Data Bundles</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Airtime Top-up</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">5G Home Broadband</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">YafunYafun SIM</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">International Roaming</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Business -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-white uppercase tracking-wider">Business & Enterprise</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">SME Business Bundles</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Cloud & Data Center</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Corporate Voice Plans</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">IoT & M2M Connectivity</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Wholesale Services</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Support -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-white uppercase tracking-wider">Help & Regulatory</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">NCC Code of Practice</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">NIN Registration Centers</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Coverage Map</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Fraud Awareness</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Whistleblowing</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 5: Company -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-white uppercase tracking-wider">About MTN</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Investor Relations</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Careers at MTN</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">MTN Foundation</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Sustainability & ESG</a></li>
+                        <li><a href="#" class="hover:text-mtn-yellow transition-colors">Media Center</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-6 text-gray-500">
+                    <a href="#" class="hover:text-mtn-yellow text-base transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-mtn-yellow text-base transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="hover:text-mtn-yellow text-base transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-mtn-yellow text-base transition-colors"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" class="hover:text-mtn-yellow text-base transition-colors"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+
+                <div class="text-center md:text-right text-[11px] text-gray-500">
+                    <p>© 2026 MTN Nigeria Communications PLC. All rights reserved.</p>
+                    <div class="flex justify-center md:justify-end space-x-4 mt-1">
+                        <a href="#" class="hover:underline">Privacy Policy</a>
+                        <a href="#" class="hover:underline">Terms & Conditions</a>
+                        <a href="#" class="hover:underline">NCC Compliance</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- MODAL OVERLAYS -->
+
+    <!-- Quick Recharge Modal -->
+    <div id="recharge-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#181818] border border-white/10 rounded-3xl p-6 sm:p-8 max-w-md w-full relative space-y-4">
+            <button onclick="closeRechargeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center">
+                <div class="w-12 h-12 bg-mtn-yellow/20 text-mtn-yellow rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white">Instant Recharge</h3>
+                <p class="text-xs text-gray-400">Recharge any MTN line securely using Debit Card, Bank Transfer or MoMo.</p>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Phone Number</label>
+                    <input type="tel" id="modal-phone" placeholder="0803 000 0000" class="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-mtn-yellow text-sm font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Amount (₦)</label>
+                    <input type="number" id="modal-amount" placeholder="e.g. 1000" class="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:outline-none focus:border-mtn-yellow text-sm font-bold">
+                </div>
+                <button onclick="confirmPurchase()" class="w-full bg-mtn-yellow text-black font-extrabold py-3 rounded-xl hover:bg-mtn-yellowHover transition-colors mt-2">
+                    Pay Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay Modal -->
+    <div id="search-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex flex-col p-6 sm:p-12">
+        <div class="flex justify-end">
+            <button onclick="toggleSearchModal()" class="text-white text-3xl hover:text-mtn-yellow">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="max-w-3xl mx-auto w-full my-auto space-y-6">
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="Search for data plans, routers, USSD codes..." class="w-full bg-transparent border-b-2 border-mtn-yellow text-2xl sm:text-4xl text-white font-bold py-4 focus:outline-none pr-12">
+                <i class="fa-solid fa-magnifying-glass text-mtn-yellow text-2xl absolute right-2 top-6"></i>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs">
+                <span class="text-gray-400 self-center">Popular:</span>
+                <button onclick="fillSearch('*312#')" class="bg-white/10 hover:bg-mtn-yellow hover:text-black px-3 py-1.5 rounded-full text-gray-300">Data Code (*312#)</button>
+                <button onclick="fillSearch('5G Router')" class="bg-white/10 hover:bg-mtn-yellow hover:text-black px-3 py-1.5 rounded-full text-gray-300">5G Router</button>
+                <button onclick="fillSearch('MoMo Transfer')" class="bg-white/10 hover:bg-mtn-yellow hover:text-black px-3 py-1.5 rounded-full text-gray-300">MoMo Transfer</button>
+                <button onclick="fillSearch('NIN Link')" class="bg-white/10 hover:bg-mtn-yellow hover:text-black px-3 py-1.5 rounded-full text-gray-300">NIN Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & INTERACTIONS -->
+    <script>
+        // Hero Carousel Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.dot');
+        let slideInterval = setInterval(nextSlide, 6000);
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (dots[i]) {
+                    dots[i].classList.remove('bg-mtn-yellow');
+                    dots[i].classList.add('bg-gray-600');
+                }
+            });
+            slides[index].classList.add('active');
+            if (dots[index]) {
+                dots[index].classList.remove('bg-gray-600');
+                dots[index].classList.add('bg-mtn-yellow');
+            }
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            let prev = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prev);
+        }
+
+        function goToSlide(index) {
+            clearInterval(slideInterval);
+            showSlide(index);
+            slideInterval = setInterval(nextSlide, 6000);
+        }
+
+        // Mobile Menu Drawer Toggle
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobile-drawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        // Tab Switching for Quick Services Widget
+        function switchQuickTab(btn, panelId) {
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('text-gray-400');
+            });
+            btn.classList.add('active');
+            btn.classList.remove('text-gray-400');
+
+            document.querySelectorAll('.quick-tab-content').forEach(panel => {
+                panel.classList.add('hidden');
+                panel.classList.remove('block');
+            });
+            document.getElementById(panelId).classList.remove('hidden');
+            document.getElementById(panelId).classList.add('block');
+        }
+
+        // Category Filter for Data Bundle Grid
+        function filterCategory(btn, category) {
+            document.querySelectorAll('.category-tab').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('text-gray-400');
+            });
+            btn.classList.add('active');
+            btn.classList.remove('text-gray-400');
+
+            const cards = document.querySelectorAll('.bundle-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function filterBundles(cat) {
+            const targetBtn = Array.from(document.querySelectorAll('.category-tab')).find(b => b.textContent.toLowerCase().includes(cat));
+            if (targetBtn) {
+                filterCategory(targetBtn, cat);
+                document.getElementById('plans-section').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Topup Quick Amount Setter
+        function setTopupAmount(amount) {
+            document.getElementById('topup-amount').value = amount;
+        }
+
+        function updateRechargeType() {
+            const type = document.querySelector('input[name="recharge-type"]:checked').value;
+            showToast(`Switched top-up mode to ${type.toUpperCase()}`);
+        }
+
+        function processQuickRecharge() {
+            const phone = document.getElementById('topup-phone').value;
+            const amount = document.getElementById('topup-amount').value;
+
+            if (!phone || phone.length < 11) {
+                showToast("Please enter a valid 11-digit MTN phone number");
+                return;
+            }
+            if (!amount || amount <= 0) {
+                showToast("Please enter a valid amount");
+                return;
+            }
+
+            showToast(`Processing ₦${amount} recharge for ${phone}...`);
+            setTimeout(() => {
+                showToast("Recharge Successful! Check SMS for confirmation.");
+            }, 1500);
+        }
+
+        // Interactive Data Usage Calculator
+        function calculateDataUsage() {
+            const videoHrs = parseInt(document.getElementById('slider-video').value);
+            const musicHrs = parseInt(document.getElementById('slider-music').value);
+            const socialHrs = parseInt(document.getElementById('slider-social').value);
+            const gamingHrs = parseInt(document.getElementById('slider-gaming').value);
+
+            document.getElementById('val-video').textContent = videoHrs;
+            document.getElementById('val-music').textContent = musicHrs;
+            document.getElementById('val-social').textContent = socialHrs;
+            document.getElementById('val-gaming').textContent = gamingHrs;
+
+            // Monthly Data Estimate Formula in GB
+            // Video: 1.5GB/hr, Music: 0.1GB/hr, Social: 0.2GB/hr, Gaming: 0.15GB/hr * 30 Days
+            const dailyGB = (videoHrs * 1.5) + (musicHrs * 0.1) + (socialHrs * 0.2) + (gamingHrs * 0.15);
+            const monthlyGB = (dailyGB * 30).toFixed(1);
+
+            document.getElementById('calc-result-gb').textContent = `${monthlyGB} GB`;
+
+            // Recommendation mapping
+            const nameEl = document.getElementById('calc-plan-name');
+            const priceEl = document.getElementById('calc-plan-price');
+
+            if (monthlyGB <= 5) {
+                nameEl.textContent = "MTN 4.5GB Monthly Plan";
+                priceEl.textContent = "₦2,000 / month";
+            } else if (monthlyGB <= 15) {
+                nameEl.textContent = "MTN 12GB Monthly Plan";
+                priceEl.textContent = "₦3,500 / month";
+            } else if (monthlyGB <= 35) {
+                nameEl.textContent = "MTN 20GB Heavy Plan";
+                priceEl.textContent = "₦5,500 / month";
+            } else if (monthlyGB <= 80) {
+                nameEl.textContent = "MTN 75GB Monthly Broadband";
+                priceEl.textContent = "₦15,000 / month";
+            } else {
+                nameEl.textContent = "MTN 5G Unlimited Home Plan";
+                priceEl.textContent = "₦25,000 / month";
+            }
+        }
+
+        function buyCalculatedPlan() {
+            const plan = document.getElementById('calc-plan-name').textContent;
+            showToast(`Redirecting to subscribe: ${plan}`);
+        }
+
+        // Modal Helpers
+        function openRechargeModal() {
+            document.getElementById('recharge-modal').classList.remove('hidden');
+        }
+
+        function closeRechargeModal() {
+            document.getElementById('recharge-modal').classList.add('hidden');
+        }
+
+        function triggerPurchase(planTitle, price) {
+            document.getElementById('modal-amount').value = price;
+            openRechargeModal();
+            showToast(`Selected ${planTitle} (₦${price})`);
+        }
+
+        function confirmPurchase() {
+            const phone = document.getElementById('modal-phone').value;
+            const amount = document.getElementById('modal-amount').value;
+            if (!phone || phone.length < 11) {
+                showToast("Please input a valid phone number");
+                return;
+            }
+            closeRechargeModal();
+            showToast(`Payment of ₦${amount} for ${phone} confirmed!`);
+        }
+
+        function toggleSearchModal() {
+            const modal = document.getElementById('search-modal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                document.getElementById('search-input').focus();
+            }
+        }
+
+        function fillSearch(term) {
+            document.getElementById('search-input').value = term;
+        }
+
+        function copyUSSD(code) {
+            // Using document.execCommand fallback for iframe safety
+            const dummy = document.createElement("input");
+            document.body.appendChild(dummy);
+            dummy.value = code;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast(`Copied USSD code: ${code}`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function openZigiChat() {
+            showToast("Connecting to Zigi AI Chatbot on WhatsApp...");
+        }
+
+        function openStoreLocator() {
+            showToast("Opening MTN Store Locator Map...");
+        }
+
+        function openLoginModal() {
+            showToast("Redirecting to myMTN Self-Care Portal...");
+        }
+
+        function showNinModal() {
+            showToast("Opening MTN NIN-SIM Self-Service Portal...");
+        }
+
+        function scrollToServices(id) {
+            const el = document.getElementById('quick-services');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize Calculator on load
+        window.onload = function() {
+            calculateDataUsage();
+        };
+    </script>
+</body>
+</html>
